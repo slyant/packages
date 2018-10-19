@@ -21,6 +21,9 @@ if PKG_USING_AT_DEVICE
         prompt "AT socket device modules"
         default AT_DEVICE_NOT_SELECTED
 
+		config AT_DEVICE_AIR800
+            bool "Quectel AIR800"
+			
         config AT_DEVICE_M26
             bool "Quectel M26/MC20"
 
@@ -36,12 +39,13 @@ if PKG_USING_AT_DEVICE
 
     config AT_DEVICE_SOCKETS_NUM
         int
+		default 1 if AT_DEVICE_AIR800
         default 6 if AT_DEVICE_M26
         default 12 if AT_DEVICE_EC20
         default 5 if AT_DEVICE_ESP8266
         default 0
 
-    if AT_DEVICE_ESP8266 || AT_DEVICE_M26 || AT_DEVICE_EC20
+    if AT_DEVICE_ESP8266 || AT_DEVICE_M26 || AT_DEVICE_EC20 || AT_DEVICE_AIR800
 
             config AT_DEVICE_NAME
                 string "AT client device name"
