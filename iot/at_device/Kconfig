@@ -21,8 +21,11 @@ if PKG_USING_AT_DEVICE
         prompt "AT socket device modules"
         default AT_DEVICE_NOT_SELECTED
 
+		config AT_DEVICE_AIR720
+            bool "Luat AIR720"
+			
 		config AT_DEVICE_AIR800
-            bool "Quectel AIR800"
+            bool "Luat AIR800"
 			
         config AT_DEVICE_M26
             bool "Quectel M26/MC20"
@@ -39,13 +42,14 @@ if PKG_USING_AT_DEVICE
 
     config AT_DEVICE_SOCKETS_NUM
         int
-		default 1 if AT_DEVICE_AIR800
+		default 6 if AT_DEVICE_AIR720
+		default 8 if AT_DEVICE_AIR800
         default 6 if AT_DEVICE_M26
         default 12 if AT_DEVICE_EC20
         default 5 if AT_DEVICE_ESP8266
         default 0
 
-    if AT_DEVICE_ESP8266 || AT_DEVICE_M26 || AT_DEVICE_EC20 || AT_DEVICE_AIR800
+    if AT_DEVICE_ESP8266 || AT_DEVICE_M26 || AT_DEVICE_EC20 || AT_DEVICE_AIR800 || AT_DEVICE_AIR720
 
             config AT_DEVICE_NAME
                 string "AT client device name"
@@ -76,6 +80,11 @@ if PKG_USING_AT_DEVICE
         help
             Select the at_device version
 
+        if AT_SW_VERSION_NUM >= 0x10200
+            config PKG_USING_AT_DEVICE_V150
+                bool "v1.5.0"
+        endif 
+           
         if AT_SW_VERSION_NUM = 0x10100
             config PKG_USING_AT_DEVICE_V130
                 bool "v1.3.0"
@@ -95,12 +104,15 @@ if PKG_USING_AT_DEVICE
     config PKG_AT_DEVICE_VER
         string
         default "latest"    if PKG_USING_AT_DEVICE_LATEST_VERSION
+		default "v1.5.0"    if PKG_USING_AT_DEVICE_V150
+        default "v1.4.0"    if PKG_USING_AT_DEVICE_V140
         default "v1.3.0"    if PKG_USING_AT_DEVICE_V130
         default "v1.2.0"    if PKG_USING_AT_DEVICE_V120
 
     config PKG_AT_DEVICE_VER_NUM
-        int
-        default 0x10400
+        hex
+		default 0x10500    if PKG_USING_AT_DEVICE_V150 
+        default 0x10400    if PKG_USING_AT_DEVICE_V140 
         default 0x10300    if PKG_USING_AT_DEVICE_V130
         default 0x10200    if PKG_USING_AT_DEVICE_V120
 
